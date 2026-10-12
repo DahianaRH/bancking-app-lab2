@@ -8,7 +8,6 @@ com\udea\lab12026p\controller\CustomerController.class
 com\udea\lab12026p\dto\CustomerDTO.class
 com\udea\lab12026p\service\TransactionService.class
 com\udea\lab12026p\entity\Transaction.class
-com\udea\lab12026p\Lab2ConsultaApplicationTests.class
 com\udea\lab12026p\controller\TransactionController.class
 com\udea\lab12026p\repository\TransactionRepository.class
 com\udea\lab12026p\controller\DataController.class
