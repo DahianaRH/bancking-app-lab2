@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConsultaApplicationTests {
+class Lab2ConsultaApplicationTests {
 
     private DataController dataController;
 
