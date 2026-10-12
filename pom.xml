@@ -18,7 +18,7 @@
 		<java.version>17</java.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<sonar.projectKey>DahianaRH_bancking-app-lab2</sonar.projectKey>
-		<sonar.organization>DahianaRH</sonar.organization>
+		<sonar.organization>dahianarh</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
