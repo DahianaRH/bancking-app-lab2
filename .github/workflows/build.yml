@@ -1,4 +1,3 @@
-
 name: CI/CD Pipeline - Aplicacion Bancaria
 
 on:
@@ -51,19 +50,32 @@ jobs:
     permissions:
       contents: read
 
-    services:
-      mysql:
-        image: mysql:8.0
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Compilar proyecto y generar cobertura
+        run: mvn -B clean verify
+
+      - name: Análisis de SonarCloud
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: lab1v2026
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >
+          mvn -B
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.token="${SONAR_TOKEN}"
+
+  build:
+    name: Construir artefacto
+    needs: sonar
+    runs-on: ubuntu-latest
 
     steps:
       - name: Descargar código del repositorio
@@ -76,46 +88,46 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Verificar version de Java
-        run: java -version
+      - name: Construir aplicación con Maven
+        run: mvn -B package -DskipTests
 
-      - name: Verificar version de Maven
-        run: mvn -version
-
-      - name: Compilar proyecto y generar cobertura
-        run: mvn -B clean verify
-
-      - name: Análisis de SonarCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          mvn -B
-          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.token="${SONAR_TOKEN}"
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: sonar
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-
-      - name: Build application with Maven
-        run: mvn -B package -DskipTests --file pom.xml
-
-      - name: Upload JAR artifact
+      - name: Subir artefacto JAR
         uses: actions/upload-artifact@v4
         with:
           name: artifact
-          path: target/lab12026p-0.0.1-SNAPSHOT.jar
+          path: target/banck-lab2.jar
           if-no-files-found: error
+
+  docker:
+    name: Construir y publicar imagen Docker
+    needs: build
+    runs-on: ubuntu-latest
+
+    # En pull requests se valida el código, pero no se publica la imagen.
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Descargar artefacto JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+          path: target
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Iniciar sesión en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Construir y publicar imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: dahianarh/aplicacion-bancaria:latest
