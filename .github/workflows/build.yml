@@ -40,6 +40,10 @@ jobs:
           cache: maven
 
       - name: Ejecutar compilación y pruebas
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/lab1v2026?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
         run: mvn -B clean verify
 
   sonar:
