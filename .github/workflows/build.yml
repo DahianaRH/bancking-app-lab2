@@ -41,6 +41,10 @@ jobs:
           cache: maven
 
       - name: Ejecutar compilación y pruebas
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/lab1v2026?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
         run: mvn -B clean verify
 
   sonar:
@@ -88,10 +92,11 @@ jobs:
       - name: Análisis de SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
           mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=DahianaRH_bancking-app-lab2
+          -Dsonar.organization=dahianarh
           -Dsonar.token="${SONAR_TOKEN}"
 
   build:
@@ -117,5 +122,33 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artifact
-          path: target/lab12026p-0.0.1-SNAPSHOT.jar
+          path: target/bancklab2.jar
           if-no-files-found: error
+
+  docker:
+    name: Construir y publicar imagen Docker
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Iniciar sesión en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Construir y publicar imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            dahianarh/aplicacion-bancaria:latest
+            dahianarh/aplicacion-bancaria:1.0.0
