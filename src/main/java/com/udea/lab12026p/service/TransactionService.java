@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
+    private final CustomerRepository customerRepository; // Para validar cuentas
 
-    @Autowired
-    private CustomerRepository customerRepository; // Para validar cuentas
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            CustomerRepository customerRepository) {
+        this.transactionRepository = transactionRepository;
+        this.customerRepository = customerRepository;
+    }
 
     public TransactionDTO transferMoney(TransactionDTO transactionDTO) {
         // Validar que los números de cuenta no sean nulos
