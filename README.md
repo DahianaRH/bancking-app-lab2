@@ -1,6 +1,17 @@
 # Aplicación Bancaria
 
 [![CI/CD Pipeline - Aplicacion Bancaria](https://github.com/DahianaRH/bancking-app-lab2/actions/workflows/build.yml/badge.svg)](https://github.com/DahianaRH/bancking-app-lab2/actions/workflows/build.yml)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Maintainability issues](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=software_quality_maintainability_issues)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Reliability issues](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=software_quality_reliability_issues)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Security issues](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=software_quality_security_issues)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
 
 Aplicación bancaria desarrollada con **Java 17, Spring Boot y Maven**, utilizada para practicar pruebas de software, integración continua y despliegue continuo (CI/CD).
 
