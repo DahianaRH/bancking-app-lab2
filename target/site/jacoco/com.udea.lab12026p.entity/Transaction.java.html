@@ -24,58 +24,58 @@ public class Transaction {
     private Double amount;
 
     // @Column(nullable = false)
-<span class="pc" id="L27">     private LocalDateTime timestamp = LocalDateTime.now();</span>
+<span class="fc" id="L27">     private LocalDateTime timestamp = LocalDateTime.now();</span>
 
 
 <span class="fc" id="L30">    public Transaction() {</span>
 <span class="fc" id="L31">    }</span>
 
-<span class="nc" id="L33">    public Transaction(Long id, String senderAccountNumber, String receiverAccountNumber, Double amount, LocalDateTime timestamp) {</span>
-<span class="nc" id="L34">        this.id = id;</span>
-<span class="nc" id="L35">        this.senderAccountNumber = senderAccountNumber;</span>
-<span class="nc" id="L36">        this.receiverAccountNumber = receiverAccountNumber;</span>
-<span class="nc" id="L37">        this.amount = amount;</span>
-<span class="nc" id="L38">        this.timestamp = timestamp;</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L33">    public Transaction(Long id, String senderAccountNumber, String receiverAccountNumber, Double amount, LocalDateTime timestamp) {</span>
+<span class="fc" id="L34">        this.id = id;</span>
+<span class="fc" id="L35">        this.senderAccountNumber = senderAccountNumber;</span>
+<span class="fc" id="L36">        this.receiverAccountNumber = receiverAccountNumber;</span>
+<span class="fc" id="L37">        this.amount = amount;</span>
+<span class="fc" id="L38">        this.timestamp = timestamp;</span>
+<span class="fc" id="L39">    }</span>
 
     public Long getId() {
-<span class="nc" id="L42">        return id;</span>
+<span class="fc" id="L42">        return id;</span>
     }
 
     public void setId(Long id) {
-<span class="nc" id="L46">        this.id = id;</span>
-<span class="nc" id="L47">    }</span>
+<span class="fc" id="L46">        this.id = id;</span>
+<span class="fc" id="L47">    }</span>
 
     public String getSenderAccountNumber() {
-<span class="nc" id="L50">        return senderAccountNumber;</span>
+<span class="fc" id="L50">        return senderAccountNumber;</span>
     }
 
     public void setSenderAccountNumber(String senderAccountNumber) {
-<span class="nc" id="L54">        this.senderAccountNumber = senderAccountNumber;</span>
-<span class="nc" id="L55">    }</span>
+<span class="fc" id="L54">        this.senderAccountNumber = senderAccountNumber;</span>
+<span class="fc" id="L55">    }</span>
 
     public String getReceiverAccountNumber() {
-<span class="nc" id="L58">        return receiverAccountNumber;</span>
+<span class="fc" id="L58">        return receiverAccountNumber;</span>
     }
 
     public void setReceiverAccountNumber(String receiverAccountNumber) {
-<span class="nc" id="L62">        this.receiverAccountNumber = receiverAccountNumber;</span>
-<span class="nc" id="L63">    }</span>
+<span class="fc" id="L62">        this.receiverAccountNumber = receiverAccountNumber;</span>
+<span class="fc" id="L63">    }</span>
 
     public Double getAmount() {
-<span class="nc" id="L66">        return amount;</span>
+<span class="fc" id="L66">        return amount;</span>
     }
 
     public void setAmount(Double amount) {
-<span class="nc" id="L70">        this.amount = amount;</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L70">        this.amount = amount;</span>
+<span class="fc" id="L71">    }</span>
 
     public LocalDateTime getTimestamp() {
-<span class="nc" id="L74">        return timestamp;</span>
+<span class="fc" id="L74">        return timestamp;</span>
     }
 
     public void setTimestamp(LocalDateTime timestamp) {
-<span class="nc" id="L78">        this.timestamp = timestamp;</span>
-<span class="nc" id="L79">    }</span>
+<span class="fc" id="L78">        this.timestamp = timestamp;</span>
+<span class="fc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

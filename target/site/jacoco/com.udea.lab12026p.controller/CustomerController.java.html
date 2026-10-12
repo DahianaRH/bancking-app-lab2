@@ -32,8 +32,8 @@ public class CustomerController {
     // ✅ Crear un nuevo cliente
     @PostMapping
     public ResponseEntity&lt;CustomerDTO&gt; createCustomer(@RequestBody CustomerDTO customerDTO) {
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (customerDTO.getBalance() == null) {</span>
-<span class="nc" id="L36">            throw new IllegalArgumentException(&quot;Balance cannot be null&quot;);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (customerDTO.getBalance() == null) {</span>
+<span class="fc" id="L36">            throw new IllegalArgumentException(&quot;Balance cannot be null&quot;);</span>
         }
 
 <span class="fc" id="L39">        return ResponseEntity.ok(customerFacade.createCustomer(customerDTO));</span>

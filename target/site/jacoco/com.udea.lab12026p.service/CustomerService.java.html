@@ -21,17 +21,17 @@ public class CustomerService {
 <span class="fc" id="L21">    }</span>
 
     public List&lt;CustomerDTO&gt; getAllCustomers() {
-<span class="nc" id="L24">        return customerRepository.findAll().stream()</span>
-<span class="nc" id="L25">                .map(customerMapper::toDTO).toList();</span>
+<span class="fc" id="L24">        return customerRepository.findAll().stream()</span>
+<span class="fc" id="L25">                .map(customerMapper::toDTO).toList();</span>
     }
     public CustomerDTO getCustomerById(Long id) {
-<span class="nc" id="L28">        return customerRepository.findById(id).map(customerMapper::toDTO)</span>
-<span class="nc" id="L29">                .orElseThrow(()-&gt; new RuntimeException(&quot;Cliente no encontrado&quot;));</span>
+<span class="fc" id="L28">        return customerRepository.findById(id).map(customerMapper::toDTO)</span>
+<span class="fc" id="L29">                .orElseThrow(()-&gt; new RuntimeException(&quot;Cliente no encontrado&quot;));</span>
     }
 
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-<span class="nc" id="L33">        Customer customer = customerMapper.toEntity(customerDTO);</span>
-<span class="nc" id="L34">        return customerMapper.toDTO(customerRepository.save(customer));</span>
+<span class="fc" id="L33">        Customer customer = customerMapper.toEntity(customerDTO);</span>
+<span class="fc" id="L34">        return customerMapper.toDTO(customerRepository.save(customer));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
