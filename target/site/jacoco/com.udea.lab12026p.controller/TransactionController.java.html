@@ -10,25 +10,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value=&quot;/api/transactions&quot;, produces = &quot;application/json&quot;)
-<span class="fc" id="L13">public class TransactionController {</span>
+public class TransactionController {
 
-    @Autowired
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
+
+<span class="fc" id="L17">    public TransactionController(TransactionService transactionService) {</span>
+<span class="fc" id="L18">        this.transactionService = transactionService;</span>
+<span class="fc" id="L19">    }</span>
 
 
     @PostMapping
     public ResponseEntity&lt;?&gt; transferMoney(@RequestBody TransactionDTO transactionDTO) {
         try {
-<span class="fc" id="L22">            TransactionDTO savedTransaction = transactionService.transferMoney(transactionDTO);</span>
-<span class="fc" id="L23">            return ResponseEntity.ok(savedTransaction);</span>
-<span class="fc" id="L24">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L25">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L25">            TransactionDTO savedTransaction = transactionService.transferMoney(transactionDTO);</span>
+<span class="fc" id="L26">            return ResponseEntity.ok(savedTransaction);</span>
+<span class="fc" id="L27">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L28">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
     @GetMapping(&quot;/{accountNumber}&quot;)
     public List&lt;TransactionDTO&gt; getTransactionsByAccount(@PathVariable String accountNumber) {
-<span class="fc" id="L31">        return transactionService.getTransactionsForAccount(accountNumber);</span>
+<span class="fc" id="L34">        return transactionService.getTransactionsForAccount(accountNumber);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -11,72 +11,76 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-<span class="fc" id="L14">public class TransactionService {</span>
+public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
+    private final CustomerRepository customerRepository; // Para validar cuentas
 
-    @Autowired
-    private CustomerRepository customerRepository; // Para validar cuentas
+    public TransactionService(
+            TransactionRepository transactionRepository,
+<span class="fc" id="L21">            CustomerRepository customerRepository) {</span>
+<span class="fc" id="L22">        this.transactionRepository = transactionRepository;</span>
+<span class="fc" id="L23">        this.customerRepository = customerRepository;</span>
+<span class="fc" id="L24">    }</span>
 
     public TransactionDTO transferMoney(TransactionDTO transactionDTO) {
         // Validar que los números de cuenta no sean nulos
-<span class="nc bnc" id="L24" title="All 4 branches missed.">        if (transactionDTO.getSenderAccountNumber() == null || transactionDTO.getReceiverAccountNumber() == null) {</span>
-<span class="nc" id="L25">            throw new IllegalArgumentException(&quot;Los números de cuenta del remitente y receptor son obligatorios.&quot;);</span>
+<span class="nc bnc" id="L28" title="All 4 branches missed.">        if (transactionDTO.getSenderAccountNumber() == null || transactionDTO.getReceiverAccountNumber() == null) {</span>
+<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;Los números de cuenta del remitente y receptor son obligatorios.&quot;);</span>
         }
 
         // Buscar los clientes por número de cuenta
-<span class="nc" id="L29">        Customer sender = customerRepository.findByAccountNumber(transactionDTO.getSenderAccountNumber())</span>
-<span class="nc" id="L30">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;La cuenta del remitente no existe.&quot;));</span>
-<span class="nc" id="L31">        Customer receiver = customerRepository.findByAccountNumber(transactionDTO.getReceiverAccountNumber())</span>
-<span class="nc" id="L32">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;La cuenta del receptor no existe.&quot;));</span>
+<span class="nc" id="L33">        Customer sender = customerRepository.findByAccountNumber(transactionDTO.getSenderAccountNumber())</span>
+<span class="nc" id="L34">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;La cuenta del remitente no existe.&quot;));</span>
+<span class="nc" id="L35">        Customer receiver = customerRepository.findByAccountNumber(transactionDTO.getReceiverAccountNumber())</span>
+<span class="nc" id="L36">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;La cuenta del receptor no existe.&quot;));</span>
 //    .orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Sender not found&quot;));
         // Validar que el remitente tenga saldo suficiente
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (sender.getBalance() &lt; transactionDTO.getAmount()) {</span>
-<span class="nc" id="L36">            throw new IllegalArgumentException(&quot;Saldo insuficiente en la cuenta del remitente.&quot;);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (sender.getBalance() &lt; transactionDTO.getAmount()) {</span>
+<span class="nc" id="L40">            throw new IllegalArgumentException(&quot;Saldo insuficiente en la cuenta del remitente.&quot;);</span>
             //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Insufficient balance&quot;);
         }
 
         // Realizar la transferencia
-<span class="nc" id="L41">        sender.setBalance(sender.getBalance() - transactionDTO.getAmount());</span>
-<span class="nc" id="L42">        receiver.setBalance(receiver.getBalance() + transactionDTO.getAmount());</span>
+<span class="nc" id="L45">        sender.setBalance(sender.getBalance() - transactionDTO.getAmount());</span>
+<span class="nc" id="L46">        receiver.setBalance(receiver.getBalance() + transactionDTO.getAmount());</span>
 
         // Guardar los cambios en las cuentas
-<span class="nc" id="L45">        customerRepository.save(sender);</span>
-<span class="nc" id="L46">        customerRepository.save(receiver);</span>
+<span class="nc" id="L49">        customerRepository.save(sender);</span>
+<span class="nc" id="L50">        customerRepository.save(receiver);</span>
 
 
         // Crear y guardar la transacción
-<span class="nc" id="L50">        Transaction transaction = new Transaction();</span>
-<span class="nc" id="L51">        transaction.setSenderAccountNumber(sender.getAccountNumber());</span>
-<span class="nc" id="L52">        transaction.setReceiverAccountNumber(receiver.getAccountNumber());</span>
-<span class="nc" id="L53">        transaction.setAmount(transactionDTO.getAmount());</span>
-<span class="nc" id="L54">        transaction.setTimestamp(transactionDTO.getTimestamp());</span>
+<span class="nc" id="L54">        Transaction transaction = new Transaction();</span>
+<span class="nc" id="L55">        transaction.setSenderAccountNumber(sender.getAccountNumber());</span>
+<span class="nc" id="L56">        transaction.setReceiverAccountNumber(receiver.getAccountNumber());</span>
+<span class="nc" id="L57">        transaction.setAmount(transactionDTO.getAmount());</span>
+<span class="nc" id="L58">        transaction.setTimestamp(transactionDTO.getTimestamp());</span>
 
-<span class="nc" id="L56">        transaction = transactionRepository.save(transaction);</span>
+<span class="nc" id="L60">        transaction = transactionRepository.save(transaction);</span>
 
         // Devolver la transacción creada como DTO
-<span class="nc" id="L59">        TransactionDTO savedTransaction = new TransactionDTO();</span>
-<span class="nc" id="L60">        savedTransaction.setId(transaction.getId());</span>
-<span class="nc" id="L61">        savedTransaction.setSenderAccountNumber(transaction.getSenderAccountNumber());</span>
-<span class="nc" id="L62">        savedTransaction.setReceiverAccountNumber(transaction.getReceiverAccountNumber());</span>
-<span class="nc" id="L63">        savedTransaction.setAmount(transaction.getAmount());</span>
-<span class="nc" id="L64">        savedTransaction.setTimestamp(transaction.getTimestamp());</span>
+<span class="nc" id="L63">        TransactionDTO savedTransaction = new TransactionDTO();</span>
+<span class="nc" id="L64">        savedTransaction.setId(transaction.getId());</span>
+<span class="nc" id="L65">        savedTransaction.setSenderAccountNumber(transaction.getSenderAccountNumber());</span>
+<span class="nc" id="L66">        savedTransaction.setReceiverAccountNumber(transaction.getReceiverAccountNumber());</span>
+<span class="nc" id="L67">        savedTransaction.setAmount(transaction.getAmount());</span>
+<span class="nc" id="L68">        savedTransaction.setTimestamp(transaction.getTimestamp());</span>
 
-<span class="nc" id="L66">        return savedTransaction;</span>
+<span class="nc" id="L70">        return savedTransaction;</span>
     }
 
     public List&lt;TransactionDTO&gt; getTransactionsForAccount(String accountNumber) {
-<span class="nc" id="L70">        List&lt;Transaction&gt; transactions = transactionRepository.findBySenderAccountNumberOrReceiverAccountNumber(accountNumber, accountNumber);</span>
-<span class="nc" id="L71">        return transactions.stream().map(transaction -&gt; {</span>
-<span class="nc" id="L72">            TransactionDTO dto = new TransactionDTO();</span>
-<span class="nc" id="L73">            dto.setId(transaction.getId());</span>
-<span class="nc" id="L74">            dto.setSenderAccountNumber(transaction.getSenderAccountNumber());</span>
-<span class="nc" id="L75">            dto.setReceiverAccountNumber(transaction.getReceiverAccountNumber());</span>
-<span class="nc" id="L76">            dto.setAmount(transaction.getAmount());</span>
-<span class="nc" id="L77">            dto.setTimestamp(transaction.getTimestamp());</span>
-<span class="nc" id="L78">            return dto;</span>
-<span class="nc" id="L79">        }).collect(Collectors.toList());</span>
+<span class="nc" id="L74">        List&lt;Transaction&gt; transactions = transactionRepository.findBySenderAccountNumberOrReceiverAccountNumber(accountNumber, accountNumber);</span>
+<span class="nc" id="L75">        return transactions.stream().map(transaction -&gt; {</span>
+<span class="nc" id="L76">            TransactionDTO dto = new TransactionDTO();</span>
+<span class="nc" id="L77">            dto.setId(transaction.getId());</span>
+<span class="nc" id="L78">            dto.setSenderAccountNumber(transaction.getSenderAccountNumber());</span>
+<span class="nc" id="L79">            dto.setReceiverAccountNumber(transaction.getReceiverAccountNumber());</span>
+<span class="nc" id="L80">            dto.setAmount(transaction.getAmount());</span>
+<span class="nc" id="L81">            dto.setTimestamp(transaction.getTimestamp());</span>
+<span class="nc" id="L82">            return dto;</span>
+<span class="nc" id="L83">        }).collect(Collectors.toList());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

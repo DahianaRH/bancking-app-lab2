@@ -30,7 +30,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - name: Descargar codigo del repositorio
+      - name: Descargar código del repositorio
         uses: actions/checkout@v4
 
       - name: Configurar Java 17
@@ -40,5 +40,56 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Ejecutar compilacion y pruebas
+      - name: Ejecutar compilación y pruebas
         run: mvn -B clean verify
+
+  sonar:
+    name: SonarCloud analysis
+    needs: tests
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: lab1v2026
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Verificar version de Java
+        run: java -version
+
+      - name: Verificar version de Maven
+        run: mvn -version
+
+      - name: Compilar proyecto y generar cobertura
+        run: mvn -B clean verify
+
+      - name: Análisis de SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          mvn -B
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.token="${SONAR_TOKEN}"
