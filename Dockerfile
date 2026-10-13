@@ -1,8 +1,17 @@
-FROM eclipse-temurin:17-jre AS build
+FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY target/banck-lab2.jar app.jar
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn -B clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+COPY --from=build /app/target/bancklab2.jar app.jar
 
 EXPOSE 8080
 

@@ -98,7 +98,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>banck-lab2</finalName>
+		<finalName>bancklab2</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
