@@ -13,7 +13,8 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DahianaRH_bancking-app-lab2&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=DahianaRH_bancking-app-lab2)
 
-Aplicación bancaria desarrollada con **Java 17, Spring Boot y Maven**, utilizada para practicar pruebas de software, integración continua y despliegue continuo (CI/CD).
+Aplicación bancaria desarrollada con **Java 17, Spring Boot y Maven**, utilizada para practicar pruebas de software, integración continua, análisis de calidad y despliegue continuo (CI/CD).
+El proyecto implementa una API REST que permite consultar clientes y gestionar transacciones bancarias. El backend se despliega en Render, utiliza una base de datos MySQL alojada en Aiven y emplea GitHub Actions para automatizar las tareas de construcción y validación del proyecto.
 
 ## Funcionalidades
 
@@ -37,7 +38,12 @@ La aplicación ofrece las siguientes operaciones:
 - MySQL
 - JUnit 5 y Spring Boot Test
 - JaCoCo para medir la cobertura de código
-- GitHub Actions para integración continua (CI)
+- GitHub Actions para integración continua y automatización del pipeline.
+- SonarCloud para análisis de calidad, si está habilitado en el pipeline.
+- Docker para empaquetar y ejecutar la aplicación.
+- Docker Hub para publicar la imagen de la aplicación.
+- Render para desplegar el backend.
+- Aiven para alojar la base de datos MySQL.
 
 ## Estructura del proyecto
 
@@ -46,6 +52,7 @@ La aplicación ofrece las siguientes operaciones:
 - `src/test/java`: pruebas automatizadas.
 - `.github/workflows/build.yml`: configuración del pipeline de GitHub Actions.
 - `pom.xml`: dependencias y configuración de compilación, pruebas y cobertura.
+- `Dockerfile`: construcción de la imagen Docker.
 
 ## Requisitos previos
 
@@ -58,24 +65,32 @@ La aplicación ofrece las siguientes operaciones:
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/USUARIO/REPOSITORIO.git
-   cd REPOSITORIO
+   git clone https://github.com/DahianaRH/bancking-app-lab2.git
+   cd bancking-app-lab2
    ```
 
-2. Configurar la conexión a MySQL en `src/main/resources/application.properties`.
+2. Configuración de la base de datos: 
+La aplicación utiliza MySQL y obtiene la configuración de conexión mediante variables de entorno. 
+Para el desarrollo local se pueden conservar valores predeterminados en application.properties.
 
-3. Compilar y ejecutar las pruebas:
+En producción, Render utiliza las credenciales del servicio MySQL de Aiven:
+- Host y puerto proporcionados por Aiven.
+- Base de datos configurada en Aiven.
+- Usuario y contraseña configurados en Aiven.
+- Conexión SSL obligatoria.
 
+3. Ejecutar la aplicación localmente
+
+- Compilar y ejecutar las pruebas:
    ```bash
    mvn clean verify
    ```
 
-4. Iniciar la aplicación:
+- Iniciar la aplicación:
 
    ```bash
    mvn spring-boot:run
    ```
-
 La API estará disponible, por defecto, en `http://localhost:8080`.
 
 ## Cómo ejecutar las pruebas
@@ -85,41 +100,39 @@ Para compilar el proyecto y ejecutar las pruebas automatizadas:
 ```bash
 mvn clean verify
 ```
+El pipeline de GitHub Actions ejecuta las comprobaciones configuradas para validar los cambios antes de integrarlos en la rama principal.
 
-El mismo comando se ejecuta automáticamente en GitHub Actions cuando se envían cambios a la rama `main` o se abre un pull request dirigido a ella.
-
-## Cómo consultar la cobertura de código
-
-JaCoCo está configurado en Maven para generar el informe de cobertura durante la fase `verify`.
-
-Ejecutar:
-
-```bash
-mvn clean verify
-```
-
-Después, consultar el informe HTML en:
+JaCoCo genera el informe de cobertura durante la fase verify. El informe HTML se encuentra en:
 
 ```text
 target/site/jacoco/index.html
 ```
 
-Si el informe se genera correctamente, abre ese archivo en un navegador para revisar la cobertura de las clases y los métodos ejecutados por las pruebas.
-
 ## Integración continua
-
-El proyecto utiliza **GitHub Actions** para automatizar la compilación y ejecución de pruebas.
 
 El flujo de trabajo se encuentra en:
 
 ```text
 .github/workflows/build.yml
 ```
+El flujo de trabajo contempla las siguientes actividades, de acuerdo con la configuración del pipeline:
 
-El pipeline se ejecuta al enviar cambios a `main`, al abrir pull requests dirigidos a `main` y también puede iniciarse manualmente desde GitHub Actions.
+1. Descargar el código del repositorio.
+2. Configurar Java 17.
+3. Ejecutar las pruebas y la verificación con Maven.
+4. Realizar el análisis de calidad configurado.
+5. Construir el artefacto JAR.
+6. Construir y publicar la imagen Docker en Docker Hub.
+7. Solicitar el despliegue en Render cuando esté configurada la integración mediante Deploy Hook.
 
-## Estado del proyecto
+Las ejecuciones se pueden consultar en la pestaña Actions del repositorio.
 
-El pipeline de integración continua está configurado y su ejecución se puede consultar en la pestaña **Actions** del repositorio.
+## Despliegue en la nube
+### Backend en Render
 
-Los análisis de calidad con SonarCloud y el despliegue en la nube se documentarán cuando estén configurados.
+URL pública: https://aplicacion-bancaria-latest.onrender.com
+
+El backend se ejecuta como un servicio web en Render utilizando una imagen Docker publicada en Docker Hub.
+
+### Base de datos MySQL en Aiven
+La base de datos se encuentra en Aiven y se conecta al backend mediante variables de entorno configuradas en Render. La conexión utiliza SSL.

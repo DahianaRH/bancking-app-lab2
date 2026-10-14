@@ -1,4 +1,3 @@
-
 name: CI/CD Pipeline - Aplicacion Bancaria
 
 on:
@@ -87,6 +86,10 @@ jobs:
         run: mvn -version
 
       - name: Compilar proyecto y generar cobertura
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/lab1v2026?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
         run: mvn -B clean verify
 
       - name: Análisis de SonarCloud
@@ -128,7 +131,7 @@ jobs:
   docker:
     name: Construir y publicar imagen Docker
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -152,3 +155,13 @@ jobs:
           tags: |
             dahianarh/aplicacion-bancaria:latest
             dahianarh/aplicacion-bancaria:1.0.0
+
+      - name: Desplegar en Render
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          test -n "$RENDER_DEPLOY_HOOK" || { echo "Falta configurar RENDER_DEPLOY_HOOK"; exit 1; }
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --retry-delay 5 \
+            -X POST "$RENDER_DEPLOY_HOOK"
